@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Search {
 	public static HashTable table = new HashTable();
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
 		Hashtable t = new Hashtable<String, ArrayList<Integer>>();
 		t.put("a", 1);
 		
@@ -53,36 +53,52 @@ public class Search {
 			
 		}
 		inputStream.close() ;		
-		
-		System.out.println(table.toString());
-		
-		//test
-		
+		readInput(args[1]);
 	
-		
-//		table.add("ha", 12);
-//		table.add("hoho", 24);
-//		table.add("oo", 36);
-//		table.add("ya", 48);
-		
-//		table.toString();
-//		Object a = table.getValue(table.toString());
-
-//		System.out.println(table.toString()+table.getNumElements());
-		
 	}
 	
-	public String readInput(String filename) {
-		Scanner query = null; 
-		ArrayList<String> queries = new ArrayList();
+	public static void readInput(String filename) throws FileNotFoundException, UnsupportedEncodingException {
 		
-		while(query.hasNextLine()) {
-			String line = query.next();
-			if (!table.contains(line))  {
-				return query.next();
-			}
-			return table.getValue(line);
+		Scanner query = null; 
+		PrintWriter writer = null;
+		byte[] outputbyte;
+		try 
+		{
+			query = new Scanner(new File(filename));
+			writer = new PrintWriter("testoutput.txt", "UTF-8");
+			
 		}
+		catch (FileNotFoundException e) 
+		{
+			
+		}
+		while(query.hasNextLine()) 
+		{
+			if(query.nextLine() != null)
+			{
+			String line = (String) query.nextLine();
+			
+			if (!table.contains(line))  
+			{
+				System.out.println(line);
+				
+				writer.println(line);
+			}
+			else
+			{
+				ArrayList<Integer> intList = (ArrayList<Integer>) table.getValue(line);
+				StringBuilder builder = new StringBuilder();
+				for(int i = 0; i < intList.size(); i++)
+				{
+					builder.append(intList.get(i));
+					builder.append(" ");
+				}
+				System.out.println(line + " " + builder.toString());
+				writer.println(line + " " + builder.toString());
+			}
+		}
+		}
+
 	}
 
 }
